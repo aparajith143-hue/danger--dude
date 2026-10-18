@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>DANGER DUDE | Anime & Web Series</title>
+<style>
+:root{--bg:#090909;--panel:#151515;--red:#ff2638;--muted:#aaa;--line:#292929}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#090909ed;border-bottom:1px solid var(--line);padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.logo{font-weight:950;letter-spacing:1.4px;font-size:22px}.logo span{color:var(--red)}
+nav{display:flex;gap:15px;flex-wrap:wrap}nav a{color:#ddd;text-decoration:none;font-size:14px}
+.wrap{max-width:1200px;margin:auto;padding:0 5%}
+.hero{margin:24px 0 30px;min-height:270px;border-radius:18px;padding:32px;display:flex;align-items:end;background:linear-gradient(90deg,#080808 0%,#080808db 42%,#0003 100%),radial-gradient(circle at 75% 25%,#8e101d,transparent 36%),linear-gradient(135deg,#251015,#090909 60%);border:1px solid #3a171b}
+.badge{color:#ff6672;font-size:12px;font-weight:800;letter-spacing:2px}.hero h1{font-size:clamp(30px,6vw,54px);line-height:1.02;margin:10px 0}.hero p{color:#ddd;max-width:520px;margin:0 0 18px}
+button,.btn{border:0;border-radius:9px;padding:11px 16px;background:var(--red);color:white;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.secondary,button.secondary{background:#292929;border:1px solid #444}
+.tools{display:flex;gap:10px;margin:18px 0 24px;flex-wrap:wrap}
+input[type=search],input[type=text],input[type=password]{background:#151515;border:1px solid #383838;color:white;border-radius:9px;padding:12px;min-width:0}
+input[type=search]{flex:1;min-width:180px}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:24px 0 14px}.section-title h2{font-size:21px;margin:0}.section-title small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.poster{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;background:linear-gradient(140deg,#3a0d14,#171717 60%,#57121c);font-size:22px;font-weight:900}
+.card-body{padding:12px}.card h3{font-size:15px;margin:0 0 5px}.meta{font-size:12px;color:var(--muted);margin-bottom:10px}
+.card-actions{display:flex;gap:7px;flex-wrap:wrap}.card-actions button{font-size:12px;padding:8px 10px}
+.notice{border:1px solid #453035;background:#180d0f;color:#ddd;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;margin:20px 0}
+#admin{display:none;background:#121212;border:1px solid #383838;border-radius:14px;padding:16px;margin:20px 0}
+#admin input{width:100%;margin:6px 0 12px}
+#player{display:none;position:fixed;inset:0;background:#000e;z-index:10;align-items:center;justify-content:center;padding:16px}
+.player-box{width:min(850px,100%);background:#111;border:1px solid #444;border-radius:14px;padding:14px}
+.player-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+video{width:100%;max-height:65vh;background:#000;border-radius:8px}
+footer{border-top:1px solid var(--line);margin-top:38px;padding:24px 5%;text-align:center;color:#888;font-size:12px}
+.empty{color:#aaa;padding:24px;text-align:center;display:none}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.poster{aspect-ratio:3/4}.hero{min-height:340px}}
+@media(min-width:950px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">DANGER <span>DUDE</span></div>
+  <nav><a href="#home">Home</a><a href="#anime">Anime</a><a href="#series">Web Series</a><a href="#admin" onclick="showAdmin(event)">Admin</a></nav>
+</header>
+<main class="wrap" id="home">
+  <section class="hero">
+    <div>
+      <div class="badge">YOUR NEXT BINGE STARTS HERE</div>
+      <h1>STREAM THE<br><span style="color:var(--red)">DANGER.</span></h1>
+      <p>Discover anime and web series in one place. A bold, mobile-first streaming experience.</p>
+      <a class="btn" href="#anime">Explore titles</a>
+    </div>
+  </section>
+  <div class="tools">
+    <input id="search" type="search" placeholder="Search titles..." aria-label="Search titles">
+    <button class="secondary" onclick="filterType('All')">All</button>
+    <button class="secondary" onclick="filterType('Anime')">Anime</button>
+    <button class="secondary" onclick="filterType('Web Series')">Web Series</button>
+  </div>
+  <section id="anime">
+    <div class="section-title"><h2>🔥 Featured & Latest</h2><small id="count">3 titles</small></div>
+    <div class="grid" id="catalog"></div>
+    <div class="empty" id="empty">No titles found. Try another search.</div>
+  </section>
+  <section id="series">
+    <div class="notice"><strong>Admin upload:</strong> This first version is a visual prototype. The local video picker can preview a video on this device only; secure online uploads for all visitors require a backend, storage, and admin authentication.</div>
+    <div id="admin">
+      <h2 style="margin-top:0">Admin panel (demo)</h2>
+      <p style="color:#aaa;font-size:13px">Demo only — this is not secure login and uploads are not saved online yet.</p>
+      <label for="adminPass">Demo access code</label>
+      <input id="adminPass" type="password" placeholder="Enter demo code">
+      <button onclick="unlockAdmin()">Unlock demo panel</button>
+      <div id="uploadForm" style="display:none;margin-top:16px">
+        <label for="titleInput">Title</label><input id="titleInput" type="text" placeholder="Video title">
+        <label for="typeInput">Category</label>
+        <select id="typeInput" style="width:100%;padding:12px;background:#151515;color:white;border:1px solid #383838;border-radius:9px;margin:6px 0 12px"><option>Anime</option><option>Web Series</option></select>
+        <label for="videoInput">Choose a video file from this phone</label><input id="videoInput" type="file" accept="video/*">
+        <button onclick="previewUpload()">Preview on this device</button>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="player">
+ <div class="player-box">
+  <div class="player-head"><strong id="playerTitle">Video preview</strong><button class="secondary" onclick="closePlayer()">Close ✕</button></div>
+  <video id="video" controls playsinline></video>
+ </div>
+</div>
+<footer>© <span id="year"></span> DANGER DUDE · Upload only videos you own or are licensed to distribute.</footer>
+<script>
+const titles = [
+ {title:"Sample Anime",type:"Anime",detail:"Featured · Demo card",art:"ANIME"},
+ {title:"Sample Web Series",type:"Web Series",detail:"Featured · Demo card",art:"SERIES"},
+ {title:"Your Next Favourite",type:"Anime",detail:"Add licensed content in the admin panel",art:"NEW RELEASE"}
+];
+let currentFilter="All", localVideoUrl=null;
+const catalog=document.getElementById("catalog");
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=titles.filter(x=>(currentFilter==="All"||x.type===currentFilter)&&x.title.toLowerCase().includes(q));
+ catalog.innerHTML=list.map((x,i)=>`<article class="card"><div class="poster">${escapeHtml(x.art)}</div><div class="card-body"><h3>${escapeHtml(x.title)}</h3><div class="meta">${escapeHtml(x.type)} · ${escapeHtml(x.detail)}</div><div class="card-actions"><button onclick="openTitle('${escapeJs(x.title)}')">▶ Play</button><button class="secondary" onclick="saveTitle('${escapeJs(x.title)}')">☆ Watchlist</button></div></div></article>`).join("");
+ document.getElementById("count").textContent=list.length+" title"+(list.length===1?"":"s");
+ document.getElementById("empty").style.display=list.length?"none":"block";
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function escapeJs(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
+function filterType(t){currentFilter=t;render();}
+function openTitle(t){alert("This is a demo title. Add a licensed video through the demo panel to preview it on this device.");}
+function saveTitle(t){let a=JSON.parse(localStorage.getItem("dd-watchlist")||"[]");if(!a.includes(t))a.push(t);localStorage.setItem("dd-watchlist",JSON.stringify(a));alert("Saved to this device's demo watchlist.");}
+function showAdmin(e){if(e)e.preventDefault();document.getElementById("admin").style.display="block";document.getElementById("admin").scrollIntoView({behavior:"smooth"});}
+function unlockAdmin(){if(document.getElementById("adminPass").value==="danger-demo"){document.getElementById("uploadForm").style.display="block";alert("Demo panel unlocked. This is not a real secure admin login.");}else alert("Demo code incorrect. For this prototype, use: danger-demo");}
+function previewUpload(){
+ const f=document.getElementById("videoInput").files[0], t=document.getElementById("titleInput").value.trim(), type=document.getElementById("typeInput").value;
+ if(!t||!f){alert("Enter a title and choose a video file.");return;}
+ if(localVideoUrl)URL.revokeObjectURL(localVideoUrl);
+ localVideoUrl=URL.createObjectURL(f);
+ document.getElementById("playerTitle").textContent=t;
+ const v=document.getElementById("video");v.src=localVideoUrl;
+ document.getElementById("player").style.display="flex";
+ // Keep this as a local preview; don't pretend the file is uploaded to the public site.
+ titles.unshift({title:t,type,detail:"Local preview only",art:"YOUR VIDEO"});
+ render();
+}
+function closePlayer(){const v=document.getElementById("video");v.pause();document.getElementById("player").style.display="none";}
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("year").textContent=new Date().getFullYear();
+render();
+</script>
+</body>
+</html>
